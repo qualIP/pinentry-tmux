@@ -1,0 +1,43 @@
+Screen {
+    align: center middle;
+    layers: dialog;
+}
+
+ModalScreen {
+    layer: dialog;
+}
+
+PinentryDialog {
+
+    & > * {
+        width: 70;
+    }
+
+    /* Above the prompt */
+    #description {
+        margin-bottom: 1;
+    }
+    /* Below the prompt */
+    #error_msg, #buttons {
+        margin-top: 1;
+    }
+
+    #prompt {
+        text-style: bold;
+    }
+    #answer {
+    }
+
+    #error_msg {
+        text-style: bold;
+        color: red;
+    }
+    #buttons {
+        align: right middle;
+        height: auto;
+        & > Button {
+            margin-left: 2;
+        }
+    }
+
+}

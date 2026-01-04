@@ -1,0 +1,26 @@
+OPTION no-grab
+OPTION ttyname={ttyname}
+OPTION ttytype=tmux-256color
+OPTION lc-ctype=en_US.UTF-8
+OPTION lc-messages=en_US.UTF-8
+OPTION allow-external-password-cache
+OPTION default-ok=_OK
+OPTION default-cancel=_Cancel
+OPTION default-yes=_Yes
+OPTION default-no=_No
+OPTION default-prompt=PIN:
+OPTION default-pwmngr=_Save in password manager
+OPTION default-cf-visi=Do you really want to make your passphrase visible on the screen?
+OPTION default-tt-visi=Make passphrase visible
+OPTION default-tt-hide=Hide passphrase
+OPTION default-capshint=Caps Lock is on
+OPTION touch-file=/run/user/1000/gnupg/S.gpg-agent
+OPTION owner=123/1000 rip
+GETINFO flavor
+GETINFO version
+GETINFO ttyinfo
+GETINFO pid
+SETKEYINFO n/F2B2E6916A87BF28EE30C7ED8C57E05A373B0D99
+SETDESC Please enter the passphrase to unlock the OpenPGP secret key:%0A%22Jean-Sebastien Trottier <jst@qualipsoft.com>%22%0A3072-bit RSA key, ID FE65C895A91596BC,%0Acreated 2021-05-29.%0A
+SETPROMPT Passphrase:
+BYE
