@@ -3,21 +3,22 @@ description: Python Coding Guidelines
 globs: *.py,pyproject.toml
 alwaysApply: false
 ---
+
 # Python Coding Guidelines
 
 These are rules for a modern Python project using uv.
 
 ## Python Version
 
-Write for Python 3.11-3.13. Do NOT write code to support earlier versions of Python.
-Always use modern Python practices appropriate for Python 3.11-3.13.
+Write for Python 3.13. Do NOT write code to support earlier versions of Python.
+Always use modern Python practices appropriate for Python 3.13.
 
 Always use full type annotations, generics, and other modern practices.
 
 ## Project Setup and Developer Workflows
 
 - Important: BE SURE you read and understand the project setup by reading the
-  pyproject.toml file and the Makefile.
+  pyproject.toml file and the GNUmakefile.
 
 - ALWAYS use uv for running all code and managing dependencies.
   Never use direct `pip` or `python` commands.

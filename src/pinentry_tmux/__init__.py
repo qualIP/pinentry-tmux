@@ -1,5 +1,6 @@
-__all__ = (  # noqa: F405
-    # TODO: Add all public symbols here.
-)
+import importlib.metadata
 
-from .pinentry_tmux import *  # noqa: F403
+try:
+    __version__ = importlib.metadata.version(__name__)
+except importlib.metadata.PackageNotFoundError:
+    __version__ = "0.0.0"

@@ -5,11 +5,11 @@ name: CI
 
 on:
   push:
-    # Use ["main", "master"] for CI only on the default branch.
+    # Use ["main"] for CI only on the default branch.
     # Use ["**"] for CI on all branches.
-    branches: ["main", "master"]
+    branches: ["main"]
   pull_request:
-    branches: ["main", "master"]
+    branches: ["main", "dev"]
 
 permissions:
   contents: read
@@ -18,10 +18,12 @@ jobs:
   build:
     strategy:
       matrix:
-        # Update this as needed:
-        # Common platforms: ["ubuntu-latest", "macos-latest", "windows-latest"]
-        os: ["ubuntu-latest"]
-        python-version: ["3.11", "3.12", "3.13"]
+        os:
+          - "ubuntu-latest"
+          # - "macos-latest"
+        python-version:
+          - "3.13"
+          - "3.14"
 
     # Linux only by default. Use ${{ matrix.os }} for other OSes.
     runs-on: ${{ matrix.os }}
@@ -31,27 +33,20 @@ jobs:
       # https://docs.astral.sh/uv/guides/integration/github/
 
       - name: Checkout (official GitHub action)
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           # Important for versioning plugins:
           fetch-depth: 0
 
       - name: Install uv (official Astral action)
-        uses: astral-sh/setup-uv@v5
+        uses: astral-sh/setup-uv@v7
         with:
-          # Update this as needed:
-          version: "0.9.5"
+          version: "0.9.21"
           enable-cache: true
           python-version: ${{ matrix.python-version }}
 
       - name: Set up Python (using uv)
         run: uv python install
-
-      # Alternately can use the official Python action:
-      # - name: Set up Python (using actions/setup-python)
-      #   uses: actions/setup-python@v5
-      #   with:
-      #     python-version: ${{ matrix.python-version }}
 
       - name: Install all dependencies
         run: uv sync --all-extras

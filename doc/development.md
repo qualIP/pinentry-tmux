@@ -6,15 +6,14 @@ This project is set up to use [uv](https://docs.astral.sh/uv/) to manage Python 
 dependencies. First, be sure you
 [have uv installed](https://docs.astral.sh/uv/getting-started/installation/).
 
-Then [fork the qualIP/pinentry-tmux
-repo](https://github.com/qualIP/pinentry-tmux/fork) (having your own
-fork will make it easier to contribute) and
+Then [fork the qualIP/pinentry-tmux repo](https://github.com/qualIP/pinentry-tmux/fork)
+(having your own fork will make it easier to contribute) and
 [clone it](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository).
 
 ## Basic Developer Workflows
 
-The `Makefile` simply offers shortcuts to `uv` commands for developer convenience.
-(For clarity, GitHub Actions don't use the Makefile and just call `uv` directly.)
+The `GNUmakefile` simply offers shortcuts to `uv` commands for developer convenience.
+(For clarity, GitHub Actions don't use the GNUmakefile and just call `uv` directly.)
 
 ```shell
 # First, install all dependencies and set up your virtual environment.
@@ -22,7 +21,7 @@ The `Makefile` simply offers shortcuts to `uv` commands for developer convenienc
 # including dev dependencies and optional dependencies.
 make install
 
-# Run uv sync, lint, and test (and also generate agent rules):
+# Run uv sync, lint, and test:
 make
 
 # Build wheel:
@@ -69,30 +68,13 @@ See [uv docs](https://docs.astral.sh/uv/) for details.
 
 ## Agent Rules
 
-See [.cursor/rules](.cursor/rules) for agent rules.
-These are written for [Cursor](https://www.cursor.com/) but are also used by other
-agents because the Makefile will generate `CLAUDE.md` and `AGENTS.md` from the same
-rules.
-
-```shell
-make agent-rules
-```
-
-## IDE setup
-
-If you use VSCode or a fork like Cursor or Windsurf, you can install the following
-extensions:
-
-- [Python](https://marketplace.visualstudio.com/items?itemName=ms-python.python)
-
-- [Based Pyright](https://marketplace.visualstudio.com/items?itemName=detachhead.basedpyright)
-  for type checking. Note that this extension works with non-Microsoft VSCode forks like
-  Cursor.
+See [AGENTS.md](AGENTS.md] and [doc/ai/instructions](doc/ai/instructions) for agent rules.
+These are written for any and all agentic software.
 
 ## Documentation
 
 - [uv docs](https://docs.astral.sh/uv/)
-
+- [ruff docs](https://docs.astral.sh/ruff/)
 - [basedpyright docs](https://docs.basedpyright.com/latest/)
 
 * * *

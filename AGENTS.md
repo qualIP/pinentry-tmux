@@ -3,6 +3,7 @@ description: General Guidelines
 globs: 
 alwaysApply: true
 ---
+
 # Assistant Rules
 
 **Your fundamental responsibility:** Remember you are a senior engineer and have a
@@ -70,3 +71,9 @@ Therefore:
   You may use then ONLY when they have clear meanings (like success or failure).
   Unless the user says otherwise, avoid emojis and Unicode in comments as clutters the
   output with little benefit.
+
+# Additional instructions
+
+See doc/ai/instructions/ directory.
+
+- **Python Coding Guidelines**: Read doc/ai/instructions/python.md

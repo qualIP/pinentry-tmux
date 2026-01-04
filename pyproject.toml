@@ -2,7 +2,7 @@
 
 [project.urls]
 Repository = "https://github.com/qualIP/pinentry-tmux"
-# Homepage = "https://..."
+Homepage = "https://github.com/qualIP/pinentry-tmux"
 # Documentation = "https://..."
 
 [project]
@@ -13,25 +13,26 @@ authors = [
 ]
 readme = "README.md"
 license = "MIT"
-requires-python = ">=3.11,<4.0"
+requires-python = ">=3.13,<4.0"
 dynamic = ["version"]
 
 # https://pypi.org/classifiers/
-# Adjust as needed:
 classifiers = [
-    # Adjust as needed:
-    "Development Status :: 4 - Beta",
-    # "Development Status :: 5 - Production/Stable",
+    "Development Status :: 5 - Production/Stable",
+    "Environment :: Console",
     "Intended Audience :: Developers",
-    "Operating System :: OS Independent",
+    "Intended Audience :: End Users/Desktop",
+    "Intended Audience :: Information Technology",
+    "Intended Audience :: System Administrators",
+    "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
+    "Operating System :: MacOS",
+    "Operating System :: POSIX :: Linux",
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.11",
-    "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
     "Typing :: Typed",
-    # Include this to avoid accidentally publishing to PyPI:
-    # "Private :: Do Not Upload",
+    # TEMP: Include this to avoid accidentally publishing to PyPI:
+    "Private :: Do Not Upload",
 ]
 
 
@@ -87,8 +88,8 @@ packages = ["src/pinentry_tmux"]
 # ---- Settings ----
 
 [tool.ruff]
-# Set as desired, typically 88 (black standard) or 100 (wide).
 line-length = 100
+target-version = "py313"
 
 [tool.ruff.lint]
 select = [
@@ -107,56 +108,22 @@ select = [
 
 ]
 ignore = [
-    # Disable some rules that are overly pedantic. Add/remove as desired:
     "E501", # https://docs.astral.sh/ruff/rules/line-too-long/
-    "E402", # https://docs.astral.sh/ruff/rules/module-import-not-at-top-of-file/
-    "E731", # https://docs.astral.sh/ruff/rules/lambda-assignment/
-    # We use both ruff formatter and linter so some rules should always be disabled.
-    # See: https://docs.astral.sh/ruff/formatter/#conflicting-lint-rules
-    "W191", # https://docs.astral.sh/ruff/rules/tab-indentation/
-    "E111", # https://docs.astral.sh/ruff/rules/indentation-with-invalid-multiple/
-    "E114", # https://docs.astral.sh/ruff/rules/indentation-with-invalid-multiple-comment/
-    "E117", # https://docs.astral.sh/ruff/rules/over-indented/
-    "D206", # https://docs.astral.sh/ruff/rules/docstring-tab-indentation/
-    "D300", # https://docs.astral.sh/ruff/rules/triple-single-quotes/
-    "Q000", # https://docs.astral.sh/ruff/rules/bad-quotes-inline-string/
-    "Q001", # https://docs.astral.sh/ruff/rules/bad-quotes-multiline-string/
-    "Q002", # https://docs.astral.sh/ruff/rules/bad-quotes-docstring/
-    "Q003", # https://docs.astral.sh/ruff/rules/avoidable-escaped-quote/
-    "COM812", # https://docs.astral.sh/ruff/rules/missing-trailing-comma/
-    "COM819", # https://docs.astral.sh/ruff/rules/prohibited-trailing-comma/
-    "ISC002", # https://docs.astral.sh/ruff/rules/multi-line-implicit-string-concatenation/
+    "UP015", # https://docs.astral.sh/ruff/rules/redundant-open-modes/
 ]
 
 [tool.basedpyright]
-# BasedPyright currently seems like the best type checker option, much faster
-# than mypy and with a good extension for VSCode/Cursor.
-# https://marketplace.visualstudio.com/items?itemName=detachhead.basedpyright
-# https://docs.basedpyright.com/latest/configuration/config-files/#sample-pyprojecttoml-file
 include = ["src", "tests", "devtools"]
-# By default BasedPyright is very strict, so you almost certainly want to disable
-# some of the rules.
-# First, these turn off warnings about (yes) how you ignore warnings:
-reportIgnoreCommentWithoutRule = false
-reportUnnecessaryTypeIgnoreComment = false
-# A few typically noisy warnings are next.
-# How many you enable is up to you. The first few are off by default, but you can
-# comment/uncomment these as desired:
-reportMissingTypeStubs = false
-reportUnusedCallResult = false
+
 reportAny = false
 reportExplicitAny = false
-reportImplicitStringConcatenation = false
-reportUnreachable = false
-# reportPrivateImportUsage = false
-# reportPrivateLocalImportUsage = false
-# reportMissingImports = false
-# reportUnnecessaryIsInstance = false
-# reportUnknownVariableType = false
-# reportUnknownArgumentType = false
+reportMissingTypeStubs = false
+reportUnannotatedClassAttribute = false
+reportUninitializedInstanceVariable = false
+reportUnusedCallResult = false
+reportUnusedParameter = false
 
 [tool.codespell]
-# Add here as needed:
 # ignore-words-list = "foo,bar"
 # skip = "foo.py,bar.py"
 

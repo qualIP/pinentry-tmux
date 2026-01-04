@@ -24,9 +24,9 @@ def main():
     rprint()
 
     if errcount != 0:
-        rprint(f"[bold red]:x: Lint failed with {errcount} errors.[/bold red]")
+        rprint(f"[bold red]:x: Lint failed with {errcount} errors.[/]")
     else:
-        rprint("[bold green]:white_check_mark: Lint passed![/bold green]")
+        rprint("[bold green]:white_check_mark: Lint passed![/]")
     rprint()
 
     return errcount
@@ -35,15 +35,15 @@ def main():
 @log_calls(level="warning", show_timing_only=True)
 def run(cmd: list[str]) -> int:
     rprint()
-    rprint(f"[bold green]>> {' '.join(cmd)}[/bold green]")
+    rprint(f"[bold green]>> {' '.join(cmd)}[/]")
     errcount = 0
     try:
         subprocess.run(cmd, text=True, check=True)
     except KeyboardInterrupt:
-        rprint("[yellow]Keyboard interrupt - Cancelled[/yellow]")
+        rprint("[yellow]Keyboard interrupt - Cancelled[/]")
         errcount = 1
     except subprocess.CalledProcessError as e:
-        rprint(f"[bold red]Error: {e}[/bold red]")
+        rprint(f"[bold red]Error: {e}[/]")
         errcount = 1
 
     return errcount
