@@ -1,0 +1,9 @@
+# Changes here will be overwritten by Copier. Do not edit manually.
+_commit: v0.2.19
+_src_path: gh:jlevy/simple-modern-uv
+package_author_email: jst@qualipsoft.com
+package_author_name: Jean-Sebastien Trottier
+package_description: pinentry-tmux is a pinentry application for TTY and tmux use.
+package_github_org: qualIP
+package_module: pinentry_tmux
+package_name: pinentry-tmux
