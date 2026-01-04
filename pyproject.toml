@@ -39,6 +39,8 @@ classifiers = [
 # ---- Main dependencies ----
 
 dependencies = [
+    "rich>=14.0.0",
+    "textual>=6.11",
 ]
 
 
@@ -50,14 +52,14 @@ dev = [
     "pytest-sugar>=1.0.0",
     "ruff>=0.11.9",
     "codespell>=2.4.1",
-    "rich>=14.0.0",
     "basedpyright>=1.29.1",
     "funlog>=0.2.1",
+    "requests",
 ]
 
 [project.scripts]
 # Add script entry points here:
-pinentry-tmux = "pinentry_tmux:main"
+pinentry-tmux = "pinentry_tmux.cli.pinentry_tmux:main"
 
 
 # ---- Build system ----
@@ -88,7 +90,7 @@ packages = ["src/pinentry_tmux"]
 # ---- Settings ----
 
 [tool.ruff]
-line-length = 100
+line-length = 150
 target-version = "py313"
 
 [tool.ruff.lint]

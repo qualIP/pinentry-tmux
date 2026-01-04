@@ -1,27 +1,80 @@
-## Installing uv and Python
+# Installing pinentry-tmux
 
-This project is set up to use [**uv**](https://docs.astral.sh/uv/), the new package
-manager for Python. `uv` replaces traditional use of `pyenv`, `pipx`, `poetry`, `pip`,
-etc. This is a quick cheat sheet on that:
+## Install uv
 
-On macOS or Linux, if you don't have `uv` installed, a quick way to install it:
-
-```shell
+```sh
 curl -LsSf https://astral.sh/uv/install.sh | sh
 ```
 
-For macOS, you prefer [brew](https://brew.sh/) you can install or upgrade uv with:
+## Install pinentry-tmux
 
-```shell
-brew update
-brew install uv
+```sh
+uv tool install "git+https://github.com/qualIP/pinentry-tmux"
 ```
 
-See [uv's docs](https://docs.astral.sh/uv/getting-started/installation/) for more
-installation methods and platforms.
+## Confirm installation
 
-Now you can use uv to install a current Python environment:
+```sh
+ls -l "$HOME/.local/bin/pinentry-tmux"
+```
 
-```shell
-uv python install 3.13 # Or pick another version.
+*NOTE: If it's not there, you probably configured custom environment variables
+and it can be found in one of the locations below. Please adapt instructions
+accordingly.*
+
+```sh
+ls -l "$UV_TOOL_BIN_DIR/pinentry-tmux"
+ls -l "$XDG_BIN_HOME/pinentry-tmux"
+ls -l "$XDG_DATA_HOME/..bin/pinentry-tmux"
+```
+
+## Update gpg-agent.conf
+
+Edit `$HOME/.gnupg/gpg-agent.conf` manually with your favorite editor to add
+this line (with the exact path substituted):
+
+```
+pinentry-program /home/user/.local/bin/pinentry-tmux
+```
+
+*Or,* run these commands to comment any old pinentry-program configuration and
+add the pinentry-tmux line:
+
+```sh
+sed -i -e 's/^pinentry-program/#&/' "$HOME/.gnupg/gpg-agent.conf"
+echo "pinentry-program $HOME/.local/bin/pinentry-tmux" >> "$HOME/.gnupg/gpg-agent.conf"
+```
+
+Reload your gpg-agent's configuration:
+
+```sh
+gpgconf --reload gpg-agent
+```
+
+## Try it out
+
+Try it out with any gpg operation requiring your passphrase, such as:
+
+```sh
+echo test | gpg --sign > /dev/null
+```
+
+If you get a graphical interface, `unset DISPLAY` and try again.
+
+# Uninstalling pinentry-tmux
+
+## Uninstall pinentry-tmux
+
+```sh
+uv tool uninstall pinentry-tmux
+```
+
+## Update gpg-agent.conf
+
+Edit `$HOME/.gnupg/gpg-agent.conf` manually with your favorite editor to remove the pinentry-tmux line and restore/uncomment any previous pinentry configuration.
+
+Reload your gpg-agent's configuration:
+
+```sh
+gpgconf --reload gpg-agent
 ```

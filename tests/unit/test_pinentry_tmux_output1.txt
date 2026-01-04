@@ -1,0 +1,31 @@
+OK Pleased to meet you, process {pid}
+OK
+OK
+OK
+OK
+OK
+OK
+OK
+OK
+OK
+OK
+OK
+OK
+OK
+OK
+OK
+OK
+OK
+OK
+D qip:tmux
+OK
+D {version}
+OK
+D {ttyname} tmux-256color - {ttystat.st_mode}/{ttystat.st_uid}/{ttystat.st_gid} {euid}/{egid} -
+OK
+D {pid}
+OK
+OK
+OK
+OK
+OK closing connection
