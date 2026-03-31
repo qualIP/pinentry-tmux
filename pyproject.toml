@@ -12,7 +12,7 @@ authors = [
     { name="Jean-Sebastien Trottier", email="jst@qualipsoft.com" },
 ]
 readme = "README.md"
-license = "MIT"
+license = "GPL-3.0-or-later"
 requires-python = ">=3.13,<4.0"
 dynamic = ["version"]
 
@@ -107,7 +107,6 @@ select = [
     # "Q" # https://docs.astral.sh/ruff/rules/#flake8-quotes-q
     # "COM" # https://docs.astral.sh/ruff/rules/#flake8-commas-com
     # "SIM", # https://docs.astral.sh/ruff/rules/#flake8-simplify-sim
-
 ]
 ignore = [
     "E501", # https://docs.astral.sh/ruff/rules/line-too-long/
@@ -115,7 +114,11 @@ ignore = [
 ]
 
 [tool.basedpyright]
-include = ["src", "tests", "devtools"]
+include = [
+    "src",
+    "tests",
+    "devtools",
+]
 
 reportAny = false
 reportExplicitAny = false
