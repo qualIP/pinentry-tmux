@@ -25,9 +25,10 @@ import typing
 import urllib.parse
 from contextlib import redirect_stdout
 from pathlib import Path
-from typing import Any, TextIO
+from typing import Any, Literal, TextIO
 
 from pinentry_tmux.lib.assuan import AssuanErrors, AssuanSession
+from pinentry_tmux.lib.utils import get_pid_environ
 from pinentry_tmux.model.pinentry import PinentryState
 from pinentry_tmux.ui.dialog import run_dialog
 from pinentry_tmux.ui.pinentry_dialog import PinentryDialog
@@ -41,6 +42,7 @@ class Args:
     tty: Path | None
     display: str | None
     timeout: float | None
+    method: Literal["window", "popup"]
 
     control_dir: Path | None
     intercept_log: Path | None
@@ -151,13 +153,16 @@ class PinentryAssuanSession(AssuanSession):
         disk.
         """
 
+        method = self.state.options.get("method", "window")
         log.debug("state: %r", self.state)
+
         if not os.environ.get("TMUX", None) and self.state.owner_pid is not None:
             try:
-                environ_bytes = open(f"/proc/{self.state.owner_pid}/environ", "rb").read()
-                environ = dict(item.split(b"=", 1) for item in environ_bytes.split(b"\x00") if b"=" in item)
-                if b"TMUX" in environ:
-                    os.environ["TMUX"] = environ[b"TMUX"].decode("ascii")
+                owner_environ = get_pid_environ(self.state.owner_pid)
+                if "TMUX" in owner_environ:
+                    os.environ["TMUX"] = owner_environ["TMUX"]
+                if "TMUX_PANE" in owner_environ:
+                    os.environ["TMUX_PANE"] = owner_environ["TMUX_PANE"]
             except Exception as e:
                 log.debug("Failed to get environment of PID %d: %s", self.state.owner_pid, e)
 
@@ -171,6 +176,7 @@ class PinentryAssuanSession(AssuanSession):
                 tmp_dir = Path(tmp_dir)
                 # Ensure only the owner can access the temp dir
                 tmp_dir.chmod(0o700)
+
                 # Create FIFOs with mode 0600 (owner read/write only)
                 in_fifo = tmp_dir / "in.fifo"
                 os.mkfifo(in_fifo, mode=0o600)
@@ -178,27 +184,59 @@ class PinentryAssuanSession(AssuanSession):
                 os.mkfifo(out_fifo, mode=0o600)
 
                 # pinentry-tmux command
-                cmd = [
+                ui_cmd = [
                     sys.executable,
                     "-m",
                     "pinentry_tmux.cli.pinentry_tmux",
+                    "--method",
+                    args.method,
                     "--remote",
                     str(tmp_dir),
                 ]
                 if log.isEnabledFor(logging.DEBUG):
-                    cmd += ["--debug"]
+                    ui_cmd += ["--debug"]
+
+                do_async: bool
 
                 # tmux command
-                cmd = [
-                    tmux,
-                    "new-window",
-                    "-n",
-                    "pinentry",
-                    subprocess.list2cmdline(cmd),
-                ]
+                match method:
+                    case "popup":
+                        do_async = True
+                        tmux_cmd = [
+                            tmux,
+                            "display-popup",
+                            # "-t",
+                            # owner_environ["TMUX_PANE"],
+                            "-B",
+                            # "-T",
+                            # "pinentry",
+                            "-w",
+                            "80",
+                            "-h",
+                            "20",
+                            "-E",
+                        ] + ui_cmd
+                    case "window":
+                        do_async = False
+                        tmux_cmd = [
+                            tmux,
+                            "new-window",
+                            "-n",
+                            "pinentry",
+                            subprocess.list2cmdline(ui_cmd),
+                        ]
+                    case _:  # pyright: ignore[reportUnnecessaryComparison]
+                        raise ValueError(f"Invalid method: {method}")  # pyright: ignore[reportUnreachable]
 
-                log.debug("Running %r", cmd)
-                subprocess.run(cmd, check=True)
+                if do_async:
+                    log.debug("Running async %r", tmux_cmd)
+                    pout = subprocess.Popen(
+                        tmux_cmd,
+                    )
+                else:
+                    log.debug("Running %r", tmux_cmd)
+                    pout = None  # For typing
+                    subprocess.run(tmux_cmd, check=True)
 
                 # Transfer state through the input FIFO.
                 with in_fifo.open("w") as in_f:
@@ -211,6 +249,11 @@ class PinentryAssuanSession(AssuanSession):
                 with out_fifo.open("r") as out_f:
                     response = PinentryResponse(**_read_json_until_success(out_f))
 
+                if do_async:
+                    assert pout
+                    rc = pout.wait()
+                    if rc != 0:
+                        raise subprocess.CalledProcessError(rc, tmux_cmd)
         else:
             # Run on this TTY
 
@@ -283,15 +326,16 @@ def remote_getpin(control_dir: Path) -> None:
     in_fifo = control_dir / "in.fifo"
     out_fifo = control_dir / "out.fifo"
 
-    cmd = [
-        "tmux",
-        "set-option",
-        "-w",
-        "remain-on-exit",
-        "failed",
-    ]
-    log.debug("Running %r", cmd)
-    subprocess.run(cmd)  # check=False
+    if args.method == "window":
+        cmd = [
+            "tmux",
+            "set-option",
+            "-w",
+            "remain-on-exit",
+            "failed",
+        ]
+        log.debug("Running %r", cmd)
+        subprocess.run(cmd)  # check=False
 
     with in_fifo.open("r") as f:
         state = PinentryState(**_read_json_until_success(f))
@@ -347,6 +391,12 @@ def main() -> None:
     )
     parser.add_argument("--tty", "-T", default=None, type=Path, help="Run in original TTY request mode")
     parser.add_argument("--intercept-log", default=None, type=Path, help="Intercept log path")
+    parser.add_argument(
+        "--method",
+        default="popup",
+        choices=["window", "popup"],
+        help="Display method: 'window' creates a new tmux window, 'popup' shows a popup on the current pane",
+    )
 
     args = typing.cast(Args, typing.cast(object, parser.parse_args()))
 
@@ -369,6 +419,7 @@ def main() -> None:
             out_file=sys.stdout,
             intercept_log=args.intercept_log,
         )
+        assuan.state.options["method"] = args.method
 
         sys.stdin = open("/dev/null")
         sys.stdout = open("/dev/null")

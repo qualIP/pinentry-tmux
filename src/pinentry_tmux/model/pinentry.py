@@ -1,6 +1,10 @@
 import dataclasses
-from typing import Literal
+from typing import Literal, TypedDict
 
+
+class PinentryOptions(TypedDict, total=False):
+    method: Literal["window", "popup"]
+    ttyname: str
 
 @dataclasses.dataclass
 class PinentryState:
@@ -8,7 +12,7 @@ class PinentryState:
     keyinfo: str | None = None
     prompt: str = "PIN:"
     error_msg: str = ""
-    options: dict[str, str | Literal[True]] = dataclasses.field(default_factory=dict)
+    options: PinentryOptions = dataclasses.field(default_factory=dict)  # pyright: ignore[reportAssignmentType, reportUnknownVariableType]
     timeout: float | None = None
 
     owner_pid: int | None = None
