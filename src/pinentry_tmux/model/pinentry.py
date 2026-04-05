@@ -1,10 +1,17 @@
 import dataclasses
 from typing import Literal, TypedDict
 
+PinentryOptions = TypedDict(
+    "PinentryOptions",
+    {
+        "method": Literal["window", "popup"],
+        "ttyname": str,
+        "default-ok": str,
+        "default-cancel": str,
+    },
+    total=False,
+)
 
-class PinentryOptions(TypedDict, total=False):
-    method: Literal["window", "popup"]
-    ttyname: str
 
 @dataclasses.dataclass
 class PinentryState:

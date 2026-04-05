@@ -15,10 +15,9 @@ class DialogApp(App[ReturnType]):
 
     dialog: ModalScreen[ReturnType]
 
-    def __init__(self, dialog: ModalScreen[ReturnType],
-                 prog: str | None = None) -> None:
+    def __init__(self, dialog: ModalScreen[ReturnType], prog: str | None = None) -> None:
         super().__init__()
-        self.title = prog or Path(sys.argv[0]).stem.replace('_', '-')
+        self.title = prog or Path(sys.argv[0]).stem.replace("_", "-")
         self.dialog = dialog
 
     @override
