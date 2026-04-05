@@ -48,11 +48,11 @@ jobs:
       - name: Set up Python (using uv)
         run: uv python install
 
-      - name: Install all dependencies
-        run: uv sync --all-extras
+      - name: Install development dependencies
+        run: make install-dev
 
       - name: Run linting
-        run: uv run python devtools/lint.py
+        run: make lint
 
       - name: Run tests
-        run: uv run pytest
+        run: make test

@@ -39,7 +39,6 @@ classifiers = [
 # ---- Main dependencies ----
 
 dependencies = [
-    "rich>=14.0.0",
     "textual>=6.11",
 ]
 
@@ -48,13 +47,11 @@ dependencies = [
 
 [dependency-groups]
 dev = [
-    "pytest>=8.3.5",
-    "pytest-sugar>=1.0.0",
-    "ruff>=0.11.9",
-    "codespell>=2.4.1",
-    "basedpyright>=1.29.1",
-    "funlog>=0.2.1",
-    "requests",
+    "basedpyright>=1.39",
+    "codespell>=2.4",
+    "pytest-sugar>=1.1",
+    "pytest>=9.0",
+    "ruff>=0.15",
 ]
 
 [project.scripts]
@@ -117,7 +114,6 @@ ignore = [
 include = [
     "src",
     "tests",
-    "devtools",
 ]
 
 reportAny = false

@@ -16,19 +16,14 @@ The `GNUmakefile` simply offers shortcuts to `uv` commands for developer conveni
 (For clarity, GitHub Actions don't use the GNUmakefile and just call `uv` directly.)
 
 ```shell
-# First, install all dependencies and set up your virtual environment.
-# This simply runs `uv sync --all-extras` to install all packages,
-# including dev dependencies and optional dependencies.
-make install
+# First, setup your virtual environment and install all development dependencies.
+make dev
 
-# Run uv sync, lint, and test:
-make
-
-# Build wheel:
-make build
-
-# Linting:
+# Linting (check mode):
 make lint
+
+# Linting (fix mode):
+make fix
 
 # Run tests:
 make test
@@ -37,7 +32,7 @@ make test
 make clean
 
 # Upgrade dependencies to compatible versions:
-make upgrade
+make upgrade-dev
 
 # To run tests by hand:
 uv run pytest   # all tests
@@ -66,6 +61,22 @@ source .venv/bin/activate
 
 See [uv docs](https://docs.astral.sh/uv/) for details.
 
+## Commits
+
+We use [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/).
+
+I strongly suggest you use a pre-commit hook to automatically lint your commit changes:
+
+```shell
+cat <<EOF > .git/hooks/pre-commit
+#!/bin/sh
+make lint
+EOF
+```
+
+If linting fails, the commit will be blocked until you fix the issues, by hand or with `make fix`, `git add` the changes and try again.
+You can still temporarily bypass the pre-commit hook with `git commit --no-verify`.
+
 ## Agent Rules
 
 See [AGENTS.md](AGENTS.md] and [doc/ai/instructions](doc/ai/instructions) for agent rules.
@@ -74,6 +85,7 @@ These are written for any and all agentic software.
 ## Documentation
 
 - [uv docs](https://docs.astral.sh/uv/)
+- [codespell docs](https://github.com/codespell-project/codespell)
 - [ruff docs](https://docs.astral.sh/ruff/)
 - [basedpyright docs](https://docs.basedpyright.com/latest/)
 
