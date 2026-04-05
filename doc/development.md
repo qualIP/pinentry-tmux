@@ -16,7 +16,7 @@ The `GNUmakefile` simply offers shortcuts to `uv` commands for developer conveni
 (For clarity, GitHub Actions don't use the GNUmakefile and just call `uv` directly.)
 
 ```shell
-# First, setup your virtual environment and install all development dependencies.
+# First, setup your virtual environment, install all development dependencies, and local git hooks.
 make dev
 
 # Linting (check mode):

@@ -17,10 +17,13 @@ install:
 	@test -d .venv || $(MAKE) venv
 	uv sync --all-extras
 
-dev: install-dev
+dev: install-dev install-githooks
 install-dev:
 	@test -d .venv || $(MAKE) venv
 	uv sync --all-extras --dev
+
+install-githooks:
+	git config core.hooksPath .githooks
 
 lint: lint-codespell lint-ruff-check lint-ruff-format lint-basedpyright lint-git-diff
 
