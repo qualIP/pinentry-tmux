@@ -50,7 +50,7 @@ dev = [
     "basedpyright>=1.39",
     "codespell>=2.4",
     "pytest-sugar>=1.1",
-    "pytest>=9.0",
+    "pytest>=9.0.3",
     "ruff>=0.15",
 ]
 
